@@ -1,0 +1,9 @@
+const STATUS = {
+  IDLE: "IDLE",
+  LOADING: "LOADING",
+  RESOLVED: "RESOLVED",
+  REJECTED: "REJECTED",
+  SEARCHING: "SEARCHING",
+} as const;
+
+export { STATUS };
