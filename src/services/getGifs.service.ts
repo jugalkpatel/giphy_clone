@@ -17,6 +17,11 @@ async function getGifs(
       );
     }
 
+    if (!response.data.length) {
+      console.log("emtpy");
+      return { gifs: [] };
+    }
+
     const gifs = response.data.map((gif: any) => {
       if (!gif.id || !gif.images.downsized) {
         throw new Error();

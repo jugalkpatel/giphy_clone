@@ -9,7 +9,7 @@ export type GIF = {
 };
 
 export type Gifs = {
-  gifs: GIF[];
+  gifs: GIF[] | [];
 };
 
 export type Params = {
