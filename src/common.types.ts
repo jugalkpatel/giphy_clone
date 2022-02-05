@@ -1,6 +1,6 @@
 export type GIF = {
   id: string;
-  title: string;
+  title?: string;
   img: {
     height: string;
     width: string;
@@ -20,4 +20,9 @@ export type Params = {
 
 export type SearchParams = Params & {
   q: string;
+};
+
+export type ServerError = {
+  success: boolean;
+  message: string;
 };

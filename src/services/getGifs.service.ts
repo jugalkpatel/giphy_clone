@@ -1,11 +1,7 @@
 import axios, { AxiosError } from "axios";
-import { Gifs, Params, SearchParams } from "../common.types";
-import { createError } from "../utils";
 
-export type ServerError = {
-  success: false;
-  msg: string;
-};
+import { Gifs, Params, SearchParams, ServerError } from "../common.types";
+import { createError } from "../utils";
 
 async function getGifs(
   url: string,
@@ -22,11 +18,8 @@ async function getGifs(
     }
 
     const gifs = response.data.map((gif: any) => {
-      if (!gif.id || !gif.title || !gif.images.downsized) {
-        throw createError(
-          "INCOMPLETE_RESPONSE",
-          "error occurred while fetching data !"
-        );
+      if (!gif.id || !gif.images.downsized) {
+        throw new Error();
       }
 
       return {
@@ -42,19 +35,15 @@ async function getGifs(
 
     return { gifs };
   } catch (error: any) {
-    if (error instanceof Error && error.name === "INCOMPLETE_RESPONSE") {
-      return { success: false, msg: error.message };
-    }
-
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
 
       if (serverError && serverError?.response) {
-        return { success: false, msg: serverError.response.data.msg };
+        return { success: false, message: serverError.response.data.message };
       }
     }
 
-    return { success: false, msg: "something went wrong! please refresh" };
+    return { success: false, message: "something went wrong! please refresh" };
   }
 }
 
