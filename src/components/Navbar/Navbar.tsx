@@ -29,7 +29,7 @@ function Navbar() {
 
   return (
     <Nav>
-      <Logo>
+      <Logo to="/">
         <GIFIcon />
         <LogoText>GIPHY</LogoText>
       </Logo>

@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 import { AiOutlineFileGif } from "react-icons/ai";
@@ -18,11 +19,13 @@ const Nav = styled.nav`
   }
 `;
 
-const Logo = styled.article`
+const Logo = styled(NavLink)`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  text-decoration: none;
+  color: ${({ theme }) => theme.text};
 
   @media (min-width: 768px) {
     padding: 0;
