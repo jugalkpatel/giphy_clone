@@ -1,11 +1,12 @@
 import axios, { AxiosError } from "axios";
+import { v4 as uuidv4 } from "uuid";
 
-import { Gifs, Params, SearchParams, ServerError } from "../common.types";
+import { Gifs, Params, ServerError } from "../common.types";
 import { createError } from "../utils";
 
 async function getGifs(
   url: string,
-  params: Params | SearchParams
+  params: Params 
 ): Promise<Gifs | ServerError> {
   try {
     const { data: response } = await axios.get(url, { params });
@@ -18,7 +19,6 @@ async function getGifs(
     }
 
     if (!response.data.length) {
-      console.log("emtpy");
       return { gifs: [] };
     }
 
@@ -28,7 +28,7 @@ async function getGifs(
       }
 
       return {
-        id: gif.id,
+        id: uuidv4(),
         title: gif.title,
         img: {
           height: gif.images.downsized.height,
