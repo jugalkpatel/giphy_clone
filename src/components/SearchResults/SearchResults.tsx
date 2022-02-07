@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import { HashLoader } from "react-spinners";
 
 import {
@@ -7,34 +7,37 @@ import {
   MessageContainer,
   ErrorIcon,
   Message,
+  ContentContainer,
 } from "../../styles/common.styles";
 
+import { Params } from "../../common.types";
 import { Gif } from "../../components";
 import { useGifs } from "../../hooks";
 import { getGifs } from "../../services";
-import { ACTIONS, STATUS } from "../../utils";
+import { STATUS, ACTIONS } from "../../utils";
 
 const URL = process.env.REACT_APP_SEARCH_URL as string;
 const API_KEY = process.env.REACT_APP_API_KEY as string;
 
 function SearchResults() {
   const { query } = useParams();
-  const [state, dispatch] = useGifs(URL, {
-    api_key: API_KEY,
-    limit: 10,
-    rating: "g",
-    q: query,
-  });
-
-  const override = `
-    grid-row: 1 / -1;
-    grid-column: 1 / -1;
-  `;
+  const [state, dispatch, ref] = useGifs(URL);
 
   useEffect(() => {
     dispatch({ type: ACTIONS.SET_LOADING });
 
-    getGifs(URL, { api_key: API_KEY, limit: 10, rating: "g", q: query })
+    const params: Params = {
+      api_key: API_KEY,
+      limit: 10,
+      rating: "g",
+    };
+
+    if (query) {
+      params.q = query;
+      dispatch({ type: ACTIONS.SET_QUERY, payload: { query } });
+    }
+
+    getGifs(URL, params)
       .then((res) => {
         if ("gifs" in res) {
           dispatch({ type: ACTIONS.SET_DATA, payload: { data: res.gifs } });
@@ -51,39 +54,84 @@ function SearchResults() {
       });
   }, [query, dispatch]);
 
-  if (state.status === STATUS.LOADING || state.status === STATUS.IDLE) {
-    return <HashLoader loading={true} css={override} size={75} color="#FFF" />;
-  }
+  const override = `
+    grid-row: 1 / -1;
+    grid-column: 1 / -1;
+    height: 70vh;
+  `;
 
-  if (state.status === STATUS.RESOLVED && state.gifs) {
-    if (!state.gifs.length) {
+  const displayElement = () => {
+    if (
+      state.status === STATUS.LOADING ||
+      state.status === STATUS.IDLE
+    ) {
+      return (
+        <HashLoader loading={true} css={override} size={75} color="#FFF" />
+      );
+    }
+
+    if (state.status === STATUS.RESOLVED && state.gifs) {
+      if (!state.gifs.length) {
+        return (
+          <MessageContainer>
+            <Message>No GIFs found for {query}</Message>
+          </MessageContainer>
+        );
+      }
+
+      return (
+        <>
+          <ContentHeader>{query}</ContentHeader>
+          {state.gifs.map(({ id, img, title }) => {
+            return <Gif key={id} id={id} title={title} img={img} />;
+          })}
+        </>
+      );
+    }
+
+    if (state.status === STATUS.REJECTED) {
       return (
         <MessageContainer>
-          <Message>No GIFs found for {query}</Message>
+          <ErrorIcon />
+          <Message>OOPS SOMETHING WENT WRONG PLEASE REFRESH !</Message>
         </MessageContainer>
       );
     }
 
-    return (
-      <>
-        <ContentHeader>{query}</ContentHeader>
-        {state.gifs.map(({ id, img, title }) => {
-          return <Gif key={id} id={id} title={title} img={img} />;
-        })}
-      </>
-    );
-  }
+    if (state.status === STATUS.LOAD_MORE && state.gifs) {
+      return (
+        <>
+          <ContentHeader>{query}</ContentHeader>
+          {state.gifs.map(({ id, img, title }) => {
+            return <Gif key={id} id={id} title={title} img={img} />;
+          })}
+          <HashLoader loading={true} css={override} size={75} color="#FFF" />
+        </>
+      );
+    }
 
-  if (state.status === STATUS.REJECTED) {
-    return (
-      <MessageContainer>
-        <ErrorIcon />
-        <Message>OOPS SOMETHING WENT WRONG PLEASE REFRESH !</Message>
-      </MessageContainer>
-    );
-  }
-
-  return <>{null}</>;
+    if (state.status === STATUS.LOAD_MORE_ERROR && state.error && state.gifs) {
+      return (
+        <>
+          <ContentHeader>{query}</ContentHeader>
+          {state.gifs.map(({ id, img, title }) => {
+            return <Gif key={id} id={id} title={title} img={img} />;
+          })}
+          <MessageContainer>
+            <ErrorIcon />
+            <Message>OOPS SOMETHING WENT WRONG PLEASE REFRESH !</Message>
+          </MessageContainer>
+        </>
+      );
+    }
+  };
+  console.log({ state });
+  return (
+    <div>
+      <ContentContainer>{displayElement()}</ContentContainer>
+      <section ref={ref}></section>
+    </div>
+  );
 }
 
 export { SearchResults };
