@@ -1,1 +1,2 @@
-export { useGifs } from "./useGif.hook";
+export { useGifs } from "./useGifs.hook";
+export { useIntersect } from "./useIntersect.hook";
