@@ -7,7 +7,6 @@ const GifTitle = styled.p`
   left: 0;
   padding: 1rem;
   font-weight: bold;
-
   @media (min-width: 568px) {
     display: none;
   }
@@ -15,7 +14,8 @@ const GifTitle = styled.p`
 
 const GifContainer = styled.article`
   position: relative;
-  height: 15rem;
+  height: 100%;
+  width: 100%;
   @media (min-width: 568px) {
     &:hover ${GifTitle} {
       display: block;

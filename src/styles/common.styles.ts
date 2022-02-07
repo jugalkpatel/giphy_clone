@@ -1,19 +1,37 @@
 import styled from "styled-components";
 import { FaRegSadCry } from "react-icons/fa";
 import { FiTrendingUp } from "react-icons/fi";
+import { GifContainer } from "../components/Gif/Gif.styles";
 
 const ContentContainer = styled.section`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: max-content;
   max-width: 1024px;
   gap: 1rem;
   padding: 1rem;
   margin: 0 auto;
-  min-height: 70vh;
+  min-height: 100vh;
   justify-items: center;
   align-items: center;
   @media (min-width: 768px) {
     gap: 0.7rem;
+    ${GifContainer}:nth-child(4n) {
+      grid-row: span 1;
+    }
+
+    ${GifContainer}:nth-child(4n - 1) {
+      grid-row: span 2;
+    }
+
+    ${GifContainer}:nth-child(4n - 2) {
+      grid-row: span 3;
+    }
+
+    ${GifContainer}:nth-child(4n - 3) {
+      grid-row: span 4;
+    }
+
   }
 `;
 
