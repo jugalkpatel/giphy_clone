@@ -16,11 +16,10 @@ export type Params = {
   api_key: string;
   limit: number;
   rating: string;
+  q?: string;
+  offset?: number;
 };
 
-export type SearchParams = Params & {
-  q: string;
-};
 
 export type ServerError = {
   success: boolean;
