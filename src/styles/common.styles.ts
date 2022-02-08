@@ -23,15 +23,6 @@ const ContentContainer = styled.section`
     ${GifContainer}:nth-child(4n - 1) {
       grid-row: span 2;
     }
-
-    ${GifContainer}:nth-child(4n - 2) {
-      grid-row: span 3;
-    }
-
-    ${GifContainer}:nth-child(4n - 3) {
-      grid-row: span 4;
-    }
-
   }
 `;
 

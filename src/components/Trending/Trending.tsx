@@ -126,8 +126,11 @@ function Trending() {
   };
   return (
     <>
-      <ContentContainer>{displayElement()}</ContentContainer>
-      <section ref={ref}></section>
+      <ContentContainer>
+        {displayElement()}
+
+        <section ref={ref}></section>
+      </ContentContainer>
     </>
   );
 }

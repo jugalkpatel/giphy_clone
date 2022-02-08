@@ -61,10 +61,7 @@ function SearchResults() {
   `;
 
   const displayElement = () => {
-    if (
-      state.status === STATUS.LOADING ||
-      state.status === STATUS.IDLE
-    ) {
+    if (state.status === STATUS.LOADING || state.status === STATUS.IDLE) {
       return (
         <HashLoader loading={true} css={override} size={75} color="#FFF" />
       );
@@ -128,8 +125,11 @@ function SearchResults() {
   console.log({ state });
   return (
     <div>
-      <ContentContainer>{displayElement()}</ContentContainer>
-      <section ref={ref}></section>
+      <ContentContainer>
+        {displayElement()}
+
+        <section ref={ref}></section>
+      </ContentContainer>
     </div>
   );
 }
